@@ -21,12 +21,6 @@
                     </div>
                     <div class="hidden md:block">
                         <div class="flex items-center ml-4 md:ml-6">
-                            <button type="button"
-                                class="relative p-1 text-gray-400 bg-gray-800 rounded-full hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                                <span class="absolute -inset-1.5" />
-                                <span class="sr-only">View notifications</span>
-                                <BellIcon class="size-6" aria-hidden="true" />
-                            </button>
 
                             <!-- Profile dropdown -->
                             <Menu as="div" class="relative ml-3">
@@ -47,9 +41,14 @@
                                     <MenuItems
                                         class="absolute right-0 z-10 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black/5 focus:outline-none">
                                         <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
-                                        <a :href="item.href"
-                                            :class="[active ? 'bg-gray-100 outline-none' : '', 'block px-4 py-2 text-sm text-gray-700']">{{
-                                                item.name }}</a>
+                                        <a v-if="item.name !== 'Sign out'" :href="item.href"
+                                            :class="[active ? 'bg-gray-100 outline-none' : '', 'block px-4 py-2 text-sm text-gray-700']">
+                                            {{ item.name }}
+                                        </a>
+                                        <button v-else @click="logout"
+                                            :class="[active ? 'bg-gray-100 outline-none w-full text-start' : '', 'block px-4 py-2 text-sm text-gray-700']">
+                                            {{ item.name }}
+                                        </button>
                                         </MenuItem>
                                     </MenuItems>
                                 </transition>
@@ -86,38 +85,28 @@
                             <div class="font-medium text-white text-base/5">{{ user.name }}</div>
                             <div class="text-sm font-medium text-gray-400">{{ user.email }}</div>
                         </div>
-                        <button type="button"
-                            class="relative p-1 ml-auto text-gray-400 bg-gray-800 rounded-full shrink-0 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                            <span class="absolute -inset-1.5" />
-                            <span class="sr-only">View notifications</span>
-                            <BellIcon class="size-6" aria-hidden="true" />
-                        </button>
                     </div>
-                    <div class="px-2 mt-3 space-y-1">
-                        <DisclosureButton v-for="item in userNavigation" :key="item.name" as="a" :href="item.href"
-                            class="block px-3 py-2 text-base font-medium text-gray-400 rounded-md hover:bg-gray-700 hover:text-white">
-                            {{ item.name }}</DisclosureButton>
+                    <div class="px-2 mt-3 space-y-1" v-for="item in userNavigation" :key="item.name">
+                        <DisclosureButton v-if="item.name !== 'Sign out'" as="a" :href="item.href"
+                            class="block w-full px-3 py-2 text-base font-medium text-gray-400 rounded-md text-start hover:bg-gray-700 hover:text-white">
+                            {{ item.name }}
+                        </DisclosureButton>
+                        <DisclosureButton v-else as="button" @click="logout"
+                            class="block w-full px-3 py-2 text-base font-medium text-gray-400 rounded-md text-start hover:bg-gray-700 hover:text-white">
+                            {{ item.name }}
+                        </DisclosureButton>
                     </div>
                 </div>
             </DisclosurePanel>
         </Disclosure>
 
-        <header class="bg-white shadow">
-            <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
-            </div>
-        </header>
-        <main>
-            <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <RouterView />
-            </div>
-        </main>
+        <RouterView />
     </div>
 </template>
 
 <script setup>
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
+import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 
 const user = {
     name: 'Tom Cook',
@@ -128,10 +117,14 @@ const user = {
 const navigation = [
     { name: 'Upload', to: { name: 'Home' } },
     { name: 'My Images', to: { name: 'MyImages' } },
-]
+];
 const userNavigation = [
     { name: 'Your Profile', href: '#' },
     { name: 'Settings', href: '#' },
     { name: 'Sign out', href: '#' },
-]
+];
+
+function logout() {
+    console.log("logout");
+}
 </script>
