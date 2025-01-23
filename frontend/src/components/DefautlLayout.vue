@@ -11,9 +11,11 @@
                         </div>
                         <div class="hidden md:block">
                             <div class="flex items-baseline ml-10 space-x-4">
-                                <a v-for="item in navigation" :key="item.name" :href="item.href"
-                                    :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium']"
-                                    :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
+                                <RouterLink v-for="item in navigation" :key="item.name" :to="item.to"
+                                    :class="[$route.name === item.to.name ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block rounded-md px-3 py-2 text-base font-medium']"
+                                    :aria-current="$route.name === item.to.name ? 'page' : undefined">
+                                    {{ item.name }}
+                                </RouterLink>
                             </div>
                         </div>
                     </div>
@@ -47,7 +49,7 @@
                                         <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
                                         <a :href="item.href"
                                             :class="[active ? 'bg-gray-100 outline-none' : '', 'block px-4 py-2 text-sm text-gray-700']">{{
-                                            item.name }}</a>
+                                                item.name }}</a>
                                         </MenuItem>
                                     </MenuItems>
                                 </transition>
@@ -71,7 +73,9 @@
                 <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                     <RouterLink v-for="item in navigation" :key="item.name" :to="item.to"
                         :class="[$route.name === item.to.name ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block rounded-md px-3 py-2 text-base font-medium']"
-                        :aria-current="$route.name === item.to.name ? 'page' : undefined">{{ item.name }}</RouterLink>
+                        :aria-current="$route.name === item.to.name ? 'page' : undefined">
+                        {{ item.name }}
+                    </RouterLink>
                 </div>
                 <div class="pt-4 pb-3 border-t border-gray-700">
                     <div class="flex items-center px-5">
@@ -122,8 +126,8 @@ const user = {
         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 const navigation = [
-    { name: 'Upload', to: {name: 'Home'}, current: true },
-    { name: 'My Images', to: {name: 'MyImages'}, current: false },
+    { name: 'Upload', to: { name: 'Home' } },
+    { name: 'My Images', to: { name: 'MyImages' } },
 ]
 const userNavigation = [
     { name: 'Your Profile', href: '#' },
