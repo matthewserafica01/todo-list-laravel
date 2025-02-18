@@ -29,7 +29,7 @@
                                         class="relative flex items-center max-w-xs text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                         <span class="absolute -inset-1.5" />
                                         <span class="sr-only">Open user menu</span>
-                                        <img class="rounded-full size-8" :src="user.imageUrl" alt="" />
+                                        <img class="rounded-full size-8" alt="" />
                                     </MenuButton>
                                 </div>
                                 <transition enter-active-class="transition duration-100 ease-out"
@@ -109,13 +109,13 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
 import axiosClient from '../axios';
 import router from '../router';
+import useUserStore from '../store/user';
+import { computed } from 'vue';
 
-const user = {
-    name: 'Tom Cook',
-    email: 'tom@example.com',
-    imageUrl:
-        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
+const userStore = useUserStore();
+
+const user = computed(() => userStore.user);
+
 const navigation = [
     { name: 'Upload', to: { name: 'Home' } },
     { name: 'My Images', to: { name: 'MyImages' } },
