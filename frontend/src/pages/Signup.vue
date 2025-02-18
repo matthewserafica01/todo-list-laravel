@@ -75,8 +75,16 @@ const data = ref({
 });
 
 function submit() {
-    axiosClient.get("/sanctum/csrf-cookie").then(response => {
-        axiosClient.post("/register", data.value);
-    });
+    axiosClient.get("/sanctum/csrf-cookie")
+        .then(response => {
+            axiosClient.post("/register", data.value, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        })
+        .catch(error => {
+            console.error(error.response.data);
+        });
 }
 </script>
