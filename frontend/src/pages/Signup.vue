@@ -1,13 +1,13 @@
 <template>
     <GuestLayout>
         <h2 class="mt-10 font-bold tracking-tight text-center text-gray-900 text-2xl/9">Create new account</h2>
-
+        <pre>{{ data }}</pre>
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form class="space-y-6" action="#" method="POST">
+            <form @submit.prevent="submit" class="space-y-6">
                 <div>
                     <label for="email" class="block font-medium text-gray-900 text-sm/6">Full Name</label>
                     <div class="mt-2">
-                        <input name="name" id="name" required=""
+                        <input name="name" id="name" required="" v-model="data.name"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                     </div>
                 </div>
@@ -16,6 +16,7 @@
                     <label for="email" class="block font-medium text-gray-900 text-sm/6">Email address</label>
                     <div class="mt-2">
                         <input type="email" name="email" id="email" autocomplete="email" required=""
+                            v-model="data.email"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                     </div>
                 </div>
@@ -25,7 +26,7 @@
                         <label for="password" class="block font-medium text-gray-900 text-sm/6">Password</label>
                     </div>
                     <div class="mt-2">
-                        <input type="password" name="password" id="password" required=""
+                        <input type="password" name="password" id="password" required="" v-model="data.password"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                     </div>
                 </div>
@@ -36,7 +37,8 @@
                             Password</label>
                     </div>
                     <div class="mt-2">
-                        <input type="cPassword" name="cPassword" id="cPassword" required=""
+                        <input type="password" name="cPassword" id="cPassword" required=""
+                            v-model="data.password_confirmation"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                     </div>
                 </div>
@@ -61,6 +63,20 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import axiosClient from '../axios';
 import GuestLayout from '../components/GuestLayout.vue';
 
+const data = ref({
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+});
+
+function submit() {
+    axiosClient.get("/sanctum/csrf-cookie").then(response => {
+        axiosClient.post("/register", data.value);
+    });
+}
 </script>
