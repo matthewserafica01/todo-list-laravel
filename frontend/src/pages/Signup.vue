@@ -66,6 +66,7 @@
 import { ref } from 'vue';
 import axiosClient from '../axios';
 import GuestLayout from '../components/GuestLayout.vue';
+import router from '../router';
 
 const data = ref({
     name: '',
@@ -82,6 +83,9 @@ function submit() {
                     'Content-Type': 'application/json'
                 }
             });
+        })
+        .then(response => {
+            router.push({ name: 'Home' });
         })
         .catch(error => {
             console.error(error.response.data);
